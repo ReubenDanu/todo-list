@@ -1,0 +1,13 @@
+oop based
+dry
+
+if database doesnt exist build new one
+data to input:
+-nik
+-message
+-date created
+-date edited
+-date goals
+-header
+
+build a database connection
