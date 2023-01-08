@@ -1,13 +1,79 @@
-oop based
-dry
+mode : prototype 🤖
+(database)
+designing database:
 
-if database doesnt exist build new one
-data to input:
--nik
--message
--date created
--date edited
--date goals
--header
+principle:
+1. avoid redundant data
+2. correctness and completness data
 
+way to do:
+1.Divides your information into subject-based tables to reduce redundant data.
+
+2.Provides Access with the information it requires to join the information in the tables together as needed.
+
+3.Helps support and ensure the accuracy and integrity of your information.
+
+4.Accommodates your data processing and reporting needs.
+
+apps : todo list
+database : a database for storing todo message, user.
+information :
+~ for finding a complete data find an info on specific part ~
+todo_list part -> table(todo):
+-id message int auto increment primary key
+-message varchar 255
+-date created date
+-date edited date
+-date goals date
+-title varchar 25
+-author varchar 30
+
+user part -> table(user):
+-id user int auto increment primary key
+-username varchar 30
+-password varchar 30 (encrpted)
+-email varchar 30
+
+relation
+each todo list have the owner it
+example : 
+reuben (owner) have the full information and encapsulted todo list (todo_list)
+
+
+
+step database logic:
 build a database connection
+if database doesnt exist build new one
+table and record ? created : skip
+
+
+//sql setup
+```
+CREATE DATABASE IF NOT EXISTS todolist
+
+USE todolist
+
+CREATE TABLE IF NOT EXISTS USER(
+ `id_user` int(11) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `author` varchar(30) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL
+  `password` varchar(30) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  PRIMARY KEY (`id_user`)
+)
+
+CREATE TABLE IF NOT EXISTS TODOLIST(
+  `id_todo` int(11) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `date_created` date NOT NULL DEFAULT CURRENT_DATE(),
+  `date_edited` date NOT NULL,
+  `date_goals` date NOT NULL,
+  `title` varchar(25) NOT NULL,
+  `author` varchar(30) NOT NULL
+  PRIMARY KEY (`id_todo`),
+  FOREIGN KEY (`author`) REFERENCES USER(`author`)
+)
+
+```

@@ -24,9 +24,68 @@ class database
         return $this->port;
     }
 
+    // logic first idea
     public static function get_default_table(){
-        $table = array("nik","message" ,"date created" ,"date edited" ,"date goals" ,"header");
-        return $table;
+        $table_field = array(
+            array("nik","message" ,"date_created" ,"date_edited" ,"date_goals" ,"header"),
+            array("todo_list")
+        );
+        sort($table_field);
+        return $table_field;
+    }
+
+    // logic for both idea
+    public function create_table(object &$conn){
+        var_dump()
+        var_dump($conn);
+        if($conn instanceof mysqli){
+            throw new Error("Not instance of mysqli class");
+        } else {
+        // second idea
+        $sql = "CREATE DATABASE IF NOT EXISTS todolist;";
+        $sql .= "USE todolist;";
+        $sql .= "CREATE TABLE IF NOT EXISTS USER(
+                `id_user` int(11) NOT NULL,
+                `username` varchar(30) NOT NULL,
+                `author` varchar(30) NOT NULL,
+                `first_name` varchar(50) NOT NULL,
+                `last_name` varchar(50) NOT NULL
+                `password` varchar(30) NOT NULL,
+                `email` varchar(30) NOT NULL,
+                PRIMARY KEY (`id_user`)
+                );";
+        $sql .= "CREATE TABLE IF NOT EXISTS TODOLIST(
+                `id_todo` int(11) NOT NULL,
+                `message` varchar(255) NOT NULL,
+                `date_created` date NOT NULL DEFAULT CURRENT_DATE(),
+                `date_edited` date NOT NULL,
+                `date_goals` date NOT NULL,
+                `title` varchar(25) NOT NULL,
+                `author` varchar(30) NOT NULL
+                PRIMARY KEY (`id_todo`),
+                FOREIGN KEY (`author`) REFERENCES USER(`author`)
+                );";
+        }
+        // $conn->multi_query($sql);    
+        // do {
+            
+        //     if($row = $result->store_result()){
+        //         while($row= $result->fetch_row()){
+        //             printf("$s\n", $row[0]);
+        //         }
+        //     }
+
+        //     if($result->more_results()){
+        //         printf("------------\n");
+        //     }
+
+        // } while ($result->next_result()){
+            
+        // }
+    }
+
+    public function Scheme(){
+        
     }
 
     public function setup()
@@ -38,44 +97,74 @@ class database
                 throw new Exception("Connection failed due to :" . $conn->connect_error);
             }
 
-            $list_database = $conn->query("SHOW DATABASES");
-            $is_present = false;
+            $this->create_table($conn);
 
-            while($row = $list_database->fetch_row()){
-                if($row[0] == $this->database){
-                    $is_present = true;
-                }
-            }
+            // start second idea
+
+            // end second ida
+
+            // start first idea
+            // $list_database = $conn->query("SHOW DATABASES");
+            // $is_present = false;
+
+            // while($row = $list_database->fetch_row()){
+            //     if($row[0] == $this->database){
+            //         $is_present = true;
+            //     }
+            // }
            
-            if ($is_present) {
-                //if database are exist
-                $conn->select_db($this->database);
-                $conn->select_db("dbtokobuku");
-                $table = $conn->query("SHOW TABLES");
-                $table_count = 0;
-                $default_table = $this->get_default_table();
+            // if ($is_present) {
+            //     $conn->select_db($this->database);
+            //     $result = $conn->query("SHOW TABLE");
+            //     $is_table_present = false;
+            //     $table_col_count = 0;
+            //     $default_table = $this->get_default_table();
+            //     $i = 0;
+            //     echo(is_object($conn));
 
-                for($i = 0; $i < count($default_table); $i++){
-                    $row = $table->fetch_row();
-                    
-                    // if($row[0] == $default_table[$i] and $default_table[$i] != null){
-                    //     $table_count += 1;
-                    // }
+            //     while ($row = $result->fetch_array(MYSQLI_NUM)) {
+            //         if($row[0] == $default_table[1][0]){
+            //             $is_table_present = true;
+            //         }
 
-                    if($row[0] == null){
-                        echo "yes";
-                    }
-                }
+            //         $i++;
+            //     }
+            //     if($is_table_present){
+            //         while ($row = $result->fetch_array(MYSQLI_NUM)) {
+            //             if($row= $result->fetch)
+            //                 if(in_array($row[0], $default_table)){
+        
+            //                         print("yes -> ($row[0] == $default_table[$i]) \n")  ; 
+            //                 } else {    
+            //                     $table_col_count = 0;   
+            //                     break;
+            //                 }
 
-                echo $table_count;
-            } else {
-                // database does not exist
-                echo "no";
-                $conn->query("CREATE DATABASE $this->database");
+            //             $i++;
+            //         }                    
+            //     }
+
+            //     if($table_col_count != 6){
+            //        try{
+            //             $this->create_table($conn);
+            //        } catch (\Throwable $th){
+            //             print_r($th);
+            //        }
+            //     } else {
+            //         // do operation
+            //     }
+
+
+            //     var_dump($table_col_count);
+
+            // } else {
+            //     // database does not exist
+            //     echo "no";
+            //     $conn->query("CREATE DATABASE $this->database");
                 
-            }
+            // }
+            // end first idea
 
-            //code...
         } catch (\Throwable $th) {
             //throw $th;
             print_r($th);
